@@ -121,34 +121,42 @@ section:last-of-type {
   font-size: 20px;
 }
 
-.nav-links {
+.lang-switch {
   display: flex;
-  gap: 28px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
 }
 
-.nav-links a {
-  text-decoration: none;
+.lang-switch-sep {
+  color: var(--color-line);
+}
+
+.lang-switch-option {
+  background: transparent;
+  border: none;
   color: var(--color-paper-dim);
+  cursor: pointer;
+  padding: 4px 2px;
+  font-family: inherit;
+  font-size: inherit;
   transition: color var(--transition);
 }
 
-.nav-links a:hover,
-.nav-links a:focus-visible {
+.lang-switch-option:hover {
+  color: var(--color-paper);
+}
+
+.lang-switch-active {
   color: var(--color-amber);
+  font-weight: 600;
 }
 
 /* ---------- Hero ---------- */
 
 .hero {
   padding-top: 88px;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 56px;
-  align-items: center;
 }
 
 .hero h1 {
@@ -180,50 +188,6 @@ section:last-of-type {
 .hero-cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(242, 169, 59, 0.25);
-}
-
-/* Сигнатурный элемент: "контактный лист" — стопка карточек-кейсов,
-   развёрнутая веером, как проявленная плёнка. Выпрямляется при наведении. */
-.filmstrip {
-  position: relative;
-  height: 380px;
-}
-
-.filmstrip-card {
-  position: absolute;
-  inset: 0;
-  background: var(--color-ink-green-soft);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  transition: transform var(--transition), box-shadow var(--transition);
-  transform-origin: bottom left;
-}
-
-.filmstrip-card:nth-child(1) { transform: rotate(-6deg) translate(-10px, 6px); z-index: 1; }
-.filmstrip-card:nth-child(2) { transform: rotate(3deg) translate(14px, 2px); z-index: 2; }
-.filmstrip-card:nth-child(3) { transform: rotate(-2deg) translate(2px, -8px); z-index: 3; }
-
-.filmstrip:hover .filmstrip-card:nth-child(1) { transform: rotate(-3deg) translate(-140px, 10px); }
-.filmstrip:hover .filmstrip-card:nth-child(2) { transform: rotate(0deg) translate(0, -6px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
-.filmstrip:hover .filmstrip-card:nth-child(3) { transform: rotate(3deg) translate(140px, 10px); }
-
-.filmstrip-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-coral);
-  margin-bottom: 8px;
-}
-
-.filmstrip-result {
-  font-family: var(--font-display);
-  font-size: 22px;
-  color: var(--color-paper);
 }
 
 /* ---------- Секция: заголовок + описание ---------- */
@@ -288,121 +252,498 @@ section:last-of-type {
   letter-spacing: 0.06em;
 }
 
-/* ---------- Кейсы ---------- */
+/* ---------- Кейсы: разделы-категории ---------- */
 
-.cases-grid {
+.category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
 }
 
-.case-card {
+.category-tile {
   background: var(--color-ink-green-soft);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  overflow: hidden;
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 4 / 3;
   transition: transform var(--transition), border-color var(--transition);
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
 }
 
-.case-card:hover {
+.category-tile:hover {
   transform: translateY(-4px);
   border-color: var(--color-amber);
 }
 
-.case-image {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
-  background: rgba(244, 241, 230, 0.06);
-}
-
-.case-body {
-  padding: 22px;
-}
-
-.case-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.case-tag {
+.category-index {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-coral);
-  border: 1px solid rgba(232, 115, 92, 0.35);
-  border-radius: 999px;
-  padding: 3px 10px;
 }
 
-.case-client {
+.category-name {
   font-family: var(--font-display);
-  font-size: 20px;
-  margin-bottom: 8px;
+  font-size: 24px;
 }
 
-.case-description {
-  color: var(--color-paper-dim);
-  font-size: 15px;
+/* ---------- Модалка кейсов ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 18, 15, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
 }
 
-.case-result {
-  margin-top: 14px;
-  font-family: var(--font-mono);
-  font-size: 13px;
+.modal-panel {
+  position: relative;
+  background: var(--color-ink-green-soft);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  width: min(960px, 100%);
+  height: min(88vh, 900px);
+  padding: 40px;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  color: var(--color-paper);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.modal-close:hover {
+  border-color: var(--color-amber);
   color: var(--color-amber);
 }
 
-/* ---------- Услуги ---------- */
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin-bottom: 24px;
+  padding-right: 48px;
+}
+
+.modal-empty {
+  color: var(--color-paper-dim);
+}
+
+.modal-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.modal-tab {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-paper-dim);
+  background: transparent;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.modal-tab:hover {
+  color: var(--color-paper);
+}
+
+.modal-tab-active {
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+}
+
+.modal-example-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.modal-example-text {
+  color: var(--color-paper-dim);
+  font-size: 16px;
+  white-space: pre-wrap;
+  margin-top: 18px;
+}
+
+/* ---------- Карусель фото ---------- */
+
+.carousel {
+  position: relative;
+}
+
+.carousel-empty {
+  color: var(--color-paper-dim);
+  padding: 40px 0;
+  text-align: center;
+}
+
+.carousel-image-wrap {
+  position: relative;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: min(50vh, 480px);
+  touch-action: pan-y;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20, 38, 32, 0.7);
+  border: 1px solid var(--color-line);
+  color: var(--color-paper);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.carousel-arrow:hover {
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+}
+
+.carousel-arrow-prev {
+  left: 12px;
+}
+
+.carousel-arrow-next {
+  right: 12px;
+}
+
+.carousel-counter {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-paper-dim);
+  margin-top: 10px;
+}
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0;
+  }
+  .modal-panel {
+    padding: 24px 16px;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+  .carousel-image-wrap {
+    height: 42vh;
+  }
+}
+
+/* ---------- Отзывы: лента чат-пузырей ---------- */
+
+.testimonials-scroll {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  padding: 4px 4px 24px;
+  scroll-snap-type: x proximity;
+}
+
+.testimonial-bubble {
+  position: relative;
+  flex: none;
+  width: min(360px, 82vw);
+  background: var(--color-ink-green-soft);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 22px;
+  scroll-snap-align: start;
+}
+
+.testimonial-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -9px;
+  left: 30px;
+  width: 16px;
+  height: 16px;
+  background: var(--color-ink-green-soft);
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0 0 3px 0;
+  transform: rotate(45deg);
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--color-line);
+  flex: none;
+}
+
+.testimonial-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 169, 59, 0.16);
+  color: var(--color-amber);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.testimonial-author {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.testimonial-role {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-paper-dim);
+  margin-top: 2px;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  color: var(--color-paper-dim);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.testimonial-toggle {
+  display: inline-block;
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-amber);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ---------- Дипломы: полка сертификатов ---------- */
+
+.diplomas-scroll {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 4px 4px 24px;
+  scroll-snap-type: x proximity;
+}
+
+.diploma-card {
+  flex: none;
+  width: min(220px, 60vw);
+  background: var(--color-ink-green-soft);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.diploma-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-amber);
+}
+
+.diploma-thumb-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.diploma-thumb {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: calc(var(--radius) - 2px);
+  background: rgba(244, 241, 230, 0.06);
+  border: 1px solid var(--color-line);
+  display: block;
+}
+
+.diploma-stamp {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  color: var(--color-ink-green);
+  border: 2px solid var(--color-ink-green-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.diploma-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.diploma-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-paper-dim);
+}
+
+.diploma-modal-panel {
+  width: min(640px, 100%);
+  height: auto;
+  max-height: 88vh;
+}
+
+.diploma-modal-image {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.2);
+  display: block;
+  margin-bottom: 18px;
+}
+
+.diploma-modal-caption {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-paper-dim);
+  margin-top: 8px;
+}
+
+/* ---------- Услуги ----------
+   Карточки компактные: имя + цена видны всегда, описание и состав
+   пакета спрятаны и раскрываются оверлеем при наведении, не сдвигая
+   соседние карточки в сетке. */
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
 }
 
 .service-card {
+  position: relative;
+  background: var(--color-ink-green-soft);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
+  padding: 16px;
   transition: border-color var(--transition), transform var(--transition);
 }
 
 .service-card:hover {
   border-color: var(--color-amber);
   transform: translateY(-4px);
+  z-index: 10;
 }
 
 .service-name {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 17px;
 }
 
 .service-price {
   font-family: var(--font-mono);
   color: var(--color-amber);
-  font-size: 14px;
-  margin: 10px 0 16px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.service-hidden {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  right: 0;
+  background: var(--color-ink-green-soft);
+  border: 1px solid var(--color-amber);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0 16px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height var(--transition), opacity var(--transition), padding var(--transition);
+}
+
+.service-card:hover .service-hidden {
+  max-height: 400px;
+  opacity: 1;
+  padding: 4px 16px 18px;
+  pointer-events: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
 .service-description {
   color: var(--color-paper-dim);
-  font-size: 15px;
-  margin-bottom: 18px;
+  font-size: 14px;
+  margin: 10px 0;
 }
 
 .service-features {
   list-style: none;
   padding: 0;
-  margin: 0 0 0 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  font-size: 14px;
+  gap: 8px;
+  font-size: 13px;
   color: var(--color-paper-dim);
 }
 
@@ -410,6 +751,65 @@ section:last-of-type {
   content: "→ ";
   color: var(--color-coral);
   font-family: var(--font-mono);
+}
+
+/* ---------- Точечные услуги ---------- */
+
+.point-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.point-service-card {
+  position: relative;
+  background: var(--color-ink-green-soft);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  padding: 16px;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.point-service-card:hover {
+  border-color: var(--color-amber);
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+.point-service-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+
+.point-service-hidden {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  right: 0;
+  background: var(--color-ink-green-soft);
+  border: 1px solid var(--color-amber);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0 16px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height var(--transition), opacity var(--transition), padding var(--transition);
+}
+
+.point-service-card:hover .point-service-hidden {
+  max-height: 300px;
+  opacity: 1;
+  padding: 4px 16px 18px;
+  pointer-events: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.point-service-description {
+  color: var(--color-paper-dim);
+  font-size: 13px;
+  margin: 10px 0 0;
 }
 
 /* ---------- Контакты ---------- */
@@ -451,21 +851,11 @@ footer {
 /* ---------- Адаптив ---------- */
 
 @media (max-width: 860px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-  .filmstrip {
-    height: 280px;
-    margin-top: 24px;
-  }
   .about-grid {
     grid-template-columns: 1fr;
   }
   .about-photo {
     max-width: 220px;
-  }
-  .nav-links {
-    display: none;
   }
   section {
     padding: 64px 0;
@@ -506,6 +896,31 @@ a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--color-amber);
   outline-offset: 2px;
+}
+
+.bilingual-row {
+  display: flex;
+  gap: 12px;
+}
+
+.bilingual-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bilingual-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-coral);
+}
+
+@media (max-width: 640px) {
+  .bilingual-row {
+    flex-direction: column;
+  }
 }
 
 .btn {

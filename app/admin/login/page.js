@@ -13,17 +13,25 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    setLoading(false);
-    if (res.ok) {
-      router.push("/admin");
-      router.refresh();
-    } else {
+
+    const timeout = AbortSignal.timeout(10000);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+        signal: timeout,
+      });
+      if (res.ok) {
+        router.push("/admin");
+        router.refresh();
+        return;
+      }
       setError("Неверный пароль");
+    } catch {
+      setError("Не удаётся связаться с сервером. Проверьте подключение к сети и повторите попытку.");
+    } finally {
+      setLoading(false);
     }
   }
 
