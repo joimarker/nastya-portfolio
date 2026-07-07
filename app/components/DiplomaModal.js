@@ -5,7 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const UI = {
   ru: { close: "Закрыть" },
-  en: { close: "[EN] Закрыть" },
+  en: { close: "Close" },
 };
 
 export default function DiplomaModal({ diploma, onClose }) {

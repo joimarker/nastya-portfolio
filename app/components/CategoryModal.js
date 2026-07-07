@@ -6,7 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const UI = {
   ru: { close: "Закрыть", empty: "Пока нет примеров в этом разделе.", example: "Пример" },
-  en: { close: "[EN] Закрыть", empty: "[EN] Пока нет примеров в этом разделе.", example: "[EN] Пример" },
+  en: { close: "Close", empty: "No examples in this section yet.", example: "Example" },
 };
 
 export default function CategoryModal({ category, onClose }) {

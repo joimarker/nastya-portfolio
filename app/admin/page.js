@@ -81,6 +81,14 @@ export default function AdminPage() {
     setData((d) => ({ ...d, [section]: { ...d[section], [field]: value } }));
   }
 
+  function addHeroPhoto(url) {
+    setData((d) => ({ ...d, hero: { ...d.hero, photos: [...(d.hero.photos || []), url] } }));
+  }
+
+  function removeHeroPhoto(idx) {
+    setData((d) => ({ ...d, hero: { ...d.hero, photos: (d.hero.photos || []).filter((_, i) => i !== idx) } }));
+  }
+
   async function updateCaseCategory(id, updates) {
     await fetch(`/api/admin/case-categories/${id}`, {
       method: "PUT",
@@ -216,6 +224,32 @@ export default function AdminPage() {
           <BilingualField label="Заголовок" value={data.hero.title} onChange={(v) => updateField("hero", "title", v)} />
           <BilingualField label="Подзаголовок" value={data.hero.subtitle} onChange={(v) => updateField("hero", "subtitle", v)} textarea rows={3} />
           <BilingualField label="Текст кнопки" value={data.hero.cta} onChange={(v) => updateField("hero", "cta", v)} />
+
+          <label style={{ fontFamily: "var(--font-mono)", fontSize: 12, textTransform: "uppercase", color: "var(--color-paper-dim)" }}>
+            Фото справа от заголовка (1-2 шт., без подписей)
+          </label>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", margin: "10px 0" }}>
+            {(data.hero.photos || []).map((url, i) => (
+              <div key={i} style={{ position: "relative" }}>
+                <img src={url} alt="" style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-line)" }} />
+                <button
+                  type="button"
+                  onClick={() => removeHeroPhoto(i)}
+                  aria-label="Удалить фото"
+                  style={{
+                    position: "absolute", top: -8, right: -8, width: 22, height: 22, borderRadius: "50%",
+                    background: "var(--color-coral)", color: "var(--color-ink-green)", border: "none", cursor: "pointer", lineHeight: 1,
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          {(data.hero.photos || []).length < 2 && (
+            <ImageUploader label="Добавить фото" value="" onChange={addHeroPhoto} />
+          )}
+
           <button className="btn" onClick={() => saveSection("hero", data.hero)}>
             {saving === "hero" ? "Сохранение..." : "Сохранить"}
           </button>

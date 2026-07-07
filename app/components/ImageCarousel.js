@@ -5,7 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const UI = {
   ru: { empty: "Нет фото", prev: "Предыдущее фото", next: "Следующее фото" },
-  en: { empty: "[EN] Нет фото", prev: "[EN] Предыдущее фото", next: "[EN] Следующее фото" },
+  en: { empty: "No photos", prev: "Previous photo", next: "Next photo" },
 };
 
 export default function ImageCarousel({ images }) {

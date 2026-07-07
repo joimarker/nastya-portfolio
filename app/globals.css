@@ -121,6 +121,26 @@ section:last-of-type {
   font-size: 20px;
 }
 
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-paper-dim);
+  transition: color var(--transition);
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: var(--color-amber);
+}
+
 .lang-switch {
   display: flex;
   align-items: center;
@@ -157,6 +177,10 @@ section:last-of-type {
 
 .hero {
   padding-top: 88px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: center;
 }
 
 .hero h1 {
@@ -188,6 +212,75 @@ section:last-of-type {
 .hero-cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(242, 169, 59, 0.25);
+}
+
+/* Фото у заголовка: пара снимков внахлёст, как проявленные карточки —
+   перекликается с "контактным листом" кейсов, но для личных фото. */
+.hero-photos {
+  position: relative;
+  height: 380px;
+}
+
+.hero-photos::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  right: 10%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(242, 169, 59, 0.22), transparent 70%);
+  filter: blur(10px);
+  z-index: 0;
+}
+
+.hero-photo-frame {
+  position: absolute;
+  border-radius: var(--radius);
+  border: 6px solid var(--color-ink-green-soft);
+  outline: 1px solid var(--color-line);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.hero-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--color-ink-green-soft);
+}
+
+.hero-photos-1 .hero-photo-frame {
+  inset: 8% 6%;
+  transform: rotate(-3deg);
+}
+
+.hero-photos-2 .hero-photo-frame:nth-child(1) {
+  width: 64%;
+  aspect-ratio: 3 / 4;
+  top: 0;
+  left: 0;
+  transform: rotate(-6deg);
+  z-index: 1;
+}
+
+.hero-photos-2 .hero-photo-frame:nth-child(2) {
+  width: 54%;
+  aspect-ratio: 3 / 4;
+  bottom: 0;
+  right: 0;
+  transform: rotate(4deg);
+  z-index: 2;
+  border-color: var(--color-amber);
+}
+
+.hero-photos:hover .hero-photo-frame:nth-child(1) {
+  transform: rotate(-9deg) translate(-10px, 4px);
+}
+
+.hero-photos:hover .hero-photo-frame:nth-child(2) {
+  transform: rotate(6deg) translate(10px, -4px) scale(1.03);
 }
 
 /* ---------- Секция: заголовок + описание ---------- */
@@ -668,89 +761,101 @@ section:last-of-type {
 }
 
 /* ---------- Услуги ----------
-   Карточки компактные: имя + цена видны всегда, описание и состав
-   пакета спрятаны и раскрываются оверлеем при наведении, не сдвигая
-   соседние карточки в сетке. */
+   Плитки компактные (имя + цена), клик открывает большую модалку —
+   там много информации: описание и полный список того, что входит. */
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }
 
-.service-card {
-  position: relative;
+.service-tile {
   background: var(--color-ink-green-soft);
   border: 1px solid var(--color-line);
   border-radius: var(--radius);
-  padding: 16px;
-  transition: border-color var(--transition), transform var(--transition);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  aspect-ratio: 4 / 3;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: transform var(--transition), border-color var(--transition);
 }
 
-.service-card:hover {
-  border-color: var(--color-amber);
+.service-tile:hover {
   transform: translateY(-4px);
-  z-index: 10;
+  border-color: var(--color-amber);
 }
 
-.service-name {
+.service-tile-name {
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 22px;
 }
 
-.service-price {
+.service-tile-price {
   font-family: var(--font-mono);
   color: var(--color-amber);
-  font-size: 12px;
-  margin-top: 8px;
-}
-
-.service-hidden {
-  position: absolute;
-  top: calc(100% - 1px);
-  left: 0;
-  right: 0;
-  background: var(--color-ink-green-soft);
-  border: 1px solid var(--color-amber);
-  border-top: none;
-  border-radius: 0 0 var(--radius) var(--radius);
-  padding: 0 16px;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition: max-height var(--transition), opacity var(--transition), padding var(--transition);
-}
-
-.service-card:hover .service-hidden {
-  max-height: 400px;
-  opacity: 1;
-  padding: 4px 16px 18px;
-  pointer-events: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-}
-
-.service-description {
-  color: var(--color-paper-dim);
   font-size: 14px;
-  margin: 10px 0;
 }
 
-.service-features {
+/* Модалка тарифа */
+
+.service-modal-panel {
+  width: min(640px, 100%);
+  height: auto;
+  max-height: 88vh;
+}
+
+.service-modal-price {
+  font-family: var(--font-mono);
+  color: var(--color-amber);
+  font-size: 15px;
+  margin: 6px 0 20px;
+}
+
+.service-modal-description {
+  color: var(--color-paper-dim);
+  font-size: 16px;
+  margin: 0 0 24px;
+}
+
+.service-modal-included {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-paper-dim);
+  margin-bottom: 14px;
+}
+
+.service-modal-features {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--color-paper-dim);
+  gap: 12px;
 }
 
-.service-features li::before {
-  content: "→ ";
-  color: var(--color-coral);
-  font-family: var(--font-mono);
+.service-modal-features li {
+  font-size: 16px;
+  padding-left: 28px;
+  position: relative;
+}
+
+.service-modal-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-amber);
+  font-weight: 700;
 }
 
 /* ---------- Точечные услуги ---------- */
@@ -851,6 +956,15 @@ footer {
 /* ---------- Адаптив ---------- */
 
 @media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .hero-photos {
+    margin-top: 32px;
+  }
+  .nav-links {
+    display: none;
+  }
   .about-grid {
     grid-template-columns: 1fr;
   }

@@ -5,7 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const UI = {
   ru: { readMore: "Читать полностью", readLess: "Свернуть" },
-  en: { readMore: "[EN] Читать полностью", readLess: "[EN] Свернуть" },
+  en: { readMore: "Read more", readLess: "Show less" },
 };
 
 const PREVIEW_LIMIT = 200;

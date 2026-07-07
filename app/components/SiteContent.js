@@ -4,9 +4,16 @@ import { useLanguage } from "../context/LanguageContext";
 import CaseCategories from "./CaseCategories";
 import Testimonials from "./Testimonials";
 import Diplomas from "./Diplomas";
+import Services from "./Services";
 
 const UI = {
   ru: {
+    navAbout: "Обо мне",
+    navCases: "Кейсы",
+    navTestimonials: "Отзывы",
+    navDiplomas: "Дипломы",
+    navServices: "Услуги",
+    navContact: "Контакты",
     aboutEyebrow: "О специалисте",
     casesEyebrow: "Портфолио",
     casesTitle: "Кейсы",
@@ -19,7 +26,7 @@ const UI = {
     diplomasSubtitle: "Курсы и сертификаты — нажмите, чтобы рассмотреть скан целиком.",
     servicesEyebrow: "Сотрудничество",
     servicesTitle: "Услуги и цены",
-    servicesSubtitle: "Форматы работы — от разового ведения до полного цикла.",
+    servicesSubtitle: "Нажмите на пакет, чтобы посмотреть, что в него входит.",
     pointServicesEyebrow: "Дополнительно",
     pointServicesTitle: "Точечные услуги",
     pointServicesSubtitle: "Разовые задачи без ведения аккаунта на постоянной основе.",
@@ -28,25 +35,31 @@ const UI = {
     footer: "Все права защищены.",
   },
   en: {
-    aboutEyebrow: "[EN] О специалисте",
-    casesEyebrow: "[EN] Портфолио",
-    casesTitle: "[EN] Кейсы",
-    casesSubtitle: "[EN] Нажмите на раздел, чтобы посмотреть примеры.",
-    testimonialsEyebrow: "[EN] Отзывы",
-    testimonialsTitle: "[EN] Что говорят клиенты",
-    testimonialsSubtitle: "[EN] Реальные сообщения о работе — коротко и без прикрас.",
-    diplomasEyebrow: "[EN] Дипломы",
-    diplomasTitle: "[EN] Подтверждённая квалификация",
-    diplomasSubtitle: "[EN] Курсы и сертификаты — нажмите, чтобы рассмотреть скан целиком.",
-    servicesEyebrow: "[EN] Сотрудничество",
-    servicesTitle: "[EN] Услуги и цены",
-    servicesSubtitle: "[EN] Форматы работы — от разового ведения до полного цикла.",
-    pointServicesEyebrow: "[EN] Дополнительно",
-    pointServicesTitle: "[EN] Точечные услуги",
-    pointServicesSubtitle: "[EN] Разовые задачи без ведения аккаунта на постоянной основе.",
-    contactEyebrow: "[EN] На связи",
-    contactTitle: "[EN] Обсудим проект?",
-    footer: "[EN] Все права защищены.",
+    navAbout: "About",
+    navCases: "Cases",
+    navTestimonials: "Testimonials",
+    navDiplomas: "Diplomas",
+    navServices: "Services",
+    navContact: "Contact",
+    aboutEyebrow: "About",
+    casesEyebrow: "Portfolio",
+    casesTitle: "Cases",
+    casesSubtitle: "Click a section to see examples.",
+    testimonialsEyebrow: "Testimonials",
+    testimonialsTitle: "What clients say",
+    testimonialsSubtitle: "Real messages about the work — short and honest.",
+    diplomasEyebrow: "Diplomas",
+    diplomasTitle: "Verified qualifications",
+    diplomasSubtitle: "Courses and certificates — click to view the full scan.",
+    servicesEyebrow: "Collaboration",
+    servicesTitle: "Services & pricing",
+    servicesSubtitle: "Click a package to see what's included.",
+    pointServicesEyebrow: "Add-ons",
+    pointServicesTitle: "One-off services",
+    pointServicesSubtitle: "Single tasks without ongoing account management.",
+    contactEyebrow: "Get in touch",
+    contactTitle: "Let's discuss your project?",
+    footer: "All rights reserved.",
   },
 };
 
@@ -54,12 +67,21 @@ export default function SiteContent({ data }) {
   const { hero, about, caseCategories, testimonials, diplomas, services, pointServices, contact } = data;
   const { lang, setLang, t } = useLanguage();
   const ui = UI[lang];
+  const heroPhotos = (hero.photos || []).slice(0, 2);
 
   return (
     <>
       <nav className="nav">
         <div className="container nav-inner">
           <span className="nav-logo">Настя</span>
+          <ul className="nav-links">
+            <li><a href="#about">{ui.navAbout}</a></li>
+            <li><a href="#cases">{ui.navCases}</a></li>
+            <li><a href="#testimonials">{ui.navTestimonials}</a></li>
+            <li><a href="#diplomas">{ui.navDiplomas}</a></li>
+            <li><a href="#services">{ui.navServices}</a></li>
+            <li><a href="#contact">{ui.navContact}</a></li>
+          </ul>
           <div className="lang-switch">
             <button
               type="button"
@@ -82,12 +104,21 @@ export default function SiteContent({ data }) {
 
       <section id="hero">
         <div className="container hero">
-          <div>
+          <div className="hero-text">
             <span className="eyebrow">{t(hero.eyebrow)}</span>
             <h1>{t(hero.title)}</h1>
             <p className="hero-subtitle">{t(hero.subtitle)}</p>
             <a className="hero-cta" href="#contact">{t(hero.cta)} →</a>
           </div>
+          {heroPhotos.length > 0 && (
+            <div className={`hero-photos hero-photos-${heroPhotos.length}`} aria-hidden="true">
+              {heroPhotos.map((src, i) => (
+                <div className="hero-photo-frame" key={i}>
+                  <img className="hero-photo" src={src} alt="" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -146,22 +177,7 @@ export default function SiteContent({ data }) {
             <h2>{ui.servicesTitle}</h2>
             <p>{ui.servicesSubtitle}</p>
           </div>
-          <div className="services-grid">
-            {services.map((s) => (
-              <div className="service-card" key={s.id}>
-                <h3 className="service-name">{t(s.name)}</h3>
-                <div className="service-price">{t(s.price)}</div>
-                <div className="service-hidden">
-                  <p className="service-description">{t(s.description)}</p>
-                  <ul className="service-features">
-                    {(t(s.features) || []).map((f, i) => (
-                      <li key={i}>{f}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Services services={services} />
         </div>
       </section>
 

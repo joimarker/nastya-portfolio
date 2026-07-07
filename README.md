@@ -67,7 +67,9 @@ npm run dev
 
 1. Залить проект в GitHub-репозиторий (см. ниже)
 2. На [supabase.com](https://supabase.com) создать бесплатный проект,
-   в нём **Storage → New bucket** с именем `portfolio` (публичный),
+   в нём **Storage → New bucket** с именем `Portfolio` (публичный,
+   регистр важен — имя бакета должно совпадать с `BUCKET` в
+   `lib/store.js` и `app/api/admin/upload/route.js`),
    затем в **Project Settings → API** скопировать Project URL и
    `service_role` ключ
 3. На Render: **New → Web Service** → подключить репозиторий

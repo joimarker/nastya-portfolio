@@ -10,7 +10,7 @@ import { createClient } from "@supabase/supabase-js";
 // нужно, чтобы загруженные через админку картинки не пропадали при
 // каждом рестарте/деплое — локальный диск на Render эфемерный.
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const BUCKET = "portfolio";
+const BUCKET = "Portfolio";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5 МБ
 
