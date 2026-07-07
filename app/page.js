@@ -4,8 +4,8 @@ import SiteContent from "./components/SiteContent";
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
-  const data = readContent();
+export default async function HomePage() {
+  const data = await readContent();
 
   return (
     <LanguageProvider>

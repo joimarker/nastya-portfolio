@@ -9,6 +9,6 @@ export async function PUT(request) {
     return NextResponse.json({ error: "Неизвестный раздел" }, { status: 400 });
   }
 
-  const updated = updateSection(section, value);
+  const updated = await updateSection(section, value);
   return NextResponse.json(updated);
 }
