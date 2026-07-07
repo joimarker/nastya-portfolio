@@ -2,7 +2,15 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+// Без DATA_DIR (локальная разработка) файлы лежат в public/uploads и
+// отдаются как обычные статические файлы Next.js. На Render с
+// Persistent Disk (DATA_DIR задан) они пишутся на смонтированный диск
+// и отдаются через app/api/uploads/[filename] — иначе новые загрузки
+// пропадали бы при каждом рестарте/деплое.
+const UPLOAD_DIR = process.env.DATA_DIR
+  ? path.join(process.env.DATA_DIR, "uploads")
+  : path.join(process.cwd(), "public", "uploads");
+const UPLOAD_URL_PREFIX = process.env.DATA_DIR ? "/api/uploads" : "/uploads";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5 МБ
 
@@ -29,5 +37,5 @@ export async function POST(request) {
   const buffer = Buffer.from(await file.arrayBuffer());
   fs.writeFileSync(path.join(UPLOAD_DIR, safeName), buffer);
 
-  return NextResponse.json({ url: `/uploads/${safeName}` });
+  return NextResponse.json({ url: `${UPLOAD_URL_PREFIX}/${safeName}` });
 }
