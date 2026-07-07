@@ -12,7 +12,11 @@
   (в отличие от sqlite3), что упрощает деплой
 - **Cookie-сессия** с HMAC-подписью (Web Crypto API) — без внешних
   библиотек авторизации
-- Картинки сохраняются в `public/uploads/`
+- Картинки и `content.json` в продакшне хранятся в **Supabase
+  Storage** (бесплатный тариф, 1GB) — локальный диск на Render
+  эфемерный и не переживает рестарты/деплои. Без переменных Supabase
+  (локальная разработка) всё пишется в `public/uploads/` и
+  `data/content.json`, как обычно.
 
 ## Структура
 
@@ -53,6 +57,8 @@ npm run dev
 |---|---|
 | `ADMIN_PASSWORD` | пароль для входа в `/admin` |
 | `SESSION_SECRET` | случайная длинная строка для подписи сессии |
+| `SUPABASE_URL` | URL проекта Supabase (Project Settings → API), только для продакшна |
+| `SUPABASE_SERVICE_KEY` | `service_role` ключ проекта (не `anon`!), только для продакшна |
 
 **Важно:** обязательно задать свои значения перед деплоем в продакшн —
 дефолтные значения из `.env.example` небезопасны.
@@ -60,16 +66,18 @@ npm run dev
 ## Деплой на Render
 
 1. Залить проект в GitHub-репозиторий (см. ниже)
-2. На Render: **New → Web Service** → подключить репозиторий
-3. Настройки сборки:
+2. На [supabase.com](https://supabase.com) создать бесплатный проект,
+   в нём **Storage → New bucket** с именем `portfolio` (публичный),
+   затем в **Project Settings → API** скопировать Project URL и
+   `service_role` ключ
+3. На Render: **New → Web Service** → подключить репозиторий
+4. Настройки сборки:
    - Build Command: `npm install && npm run build`
    - Start Command: `npm run start`
-4. В разделе Environment добавить `ADMIN_PASSWORD` и `SESSION_SECRET`
-5. **Важно про картинки:** Render по умолчанию не хранит файлы между
-   деплоями (диск эфемерный) — загруженные через админку картинки
-   пропадут при следующем деплое. Для продакшна нужно подключить
-   Render **Persistent Disk** (Settings → Disks, примонтировать на
-   `/opt/render/project/src/public/uploads`), иначе картинки слетят.
+5. В разделе Environment добавить `ADMIN_PASSWORD`, `SESSION_SECRET`,
+   `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`
+6. Диск (Persistent Disk) не нужен — весь изменяемый контент и
+   картинки хранятся в Supabase, бесплатный план Render подходит.
 
 ## Как залить в GitHub
 
